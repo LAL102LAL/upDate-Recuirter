@@ -1,49 +1,47 @@
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import profile from "../assets/profile2.svg";
-import dropdown from "../assets/Dropdown.svg";
+import profile from "../assets/profile2.png";
 
-const NavBar = ({ auth, Logout }) => {
-  const [isOpen, setIsOpen] = useState(false);
+import img from "../assets/plus_icon.png";
+import img2 from "../assets/down-arrow.png";
+import RecruiterForm from "../components/RecruiterForm/RecruiterForm.jsx"; // Import the RecruiterForm
+import { FaBars, FaTimes } from "react-icons/fa";
+
+const NavBar = () => {
   const [isJobSeeker, setIsJobSeeker] = useState(false);
   const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false); // Dropdown toggle
+  const [role, setRole] = useState("Job Seeker");
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle
+  const [isMobileView, setIsMobileView] = useState(false); // Track mobile view
+  const [showRecruiterForm, setShowRecruiterForm] = useState(false); // State for modal
+  const sidebarRef = useRef(null);
 
-  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const checkUserStatus = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/Profile`,
+        { 
+          withCredentials: true ,
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/Profile`,
-          {
-            withCredentials: true,
-          }
-        );
-        if (response.status === 200) {
-          setIsUserAuthenticated(true);
-          if (response.data.WhoIAm === "recruiter") {
-            setIsJobSeeker(false);
-          } else {
-            setIsJobSeeker(true);
-          }
         }
-      } catch (error) {
-        setIsUserAuthenticated(false);
+      );
+      if (response.status === 200) {
+        setIsUserAuthenticated(true);
+        setIsJobSeeker(response.data.WhoIAm !== "recruiter");
       }
-    };
-
-    if (!isUserAuthenticated) getUser();
-  }, [isUserAuthenticated]);
+    } catch {
+      setIsUserAuthenticated(false);
+    }
+  };
+ 
 
   const handleLogout = async () => {
     try {
       const logout = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/logout`,
         {},
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
       if (logout.status === 200) {
         setIsUserAuthenticated(false);
@@ -54,239 +52,210 @@ const NavBar = ({ auth, Logout }) => {
     }
   };
 
+  const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const handleClickOutside = (event) => {
+    if (
+      sidebarRef.current &&
+      !sidebarRef.current.contains(event.target) &&
+      sidebarOpen
+    ) {
+      setSidebarOpen(false);
+    }
+  };
+
+  const changeRole = (selectedRole) => {
+    setRole(selectedRole);
+    setDropdownOpen(false); // Close dropdown on selection
+  };
+
+  const updateViewMode = () => {
+    setIsMobileView(window.innerWidth < 768); // Adjust based on your breakpoint
+  };
+
+  useEffect(() => {
+    if (!isUserAuthenticated) checkUserStatus();
+
+    document.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("resize", updateViewMode);
+
+    // Check initial screen width
+    updateViewMode();
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("resize", updateViewMode);
+    };
+  }, [isUserAuthenticated, sidebarOpen]);
+  console.log(isUserAuthenticated);
+
   return (
-    <nav className="bg-red-700 text-xl  text-white font-bold fixed w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo for Desktop */}
-          <div className="flex-shrink-0 hidden md:block">
-            <a href="/" className="text-3xl font-extrabold ">
+    <>
+      <nav className="bg-red-700 text-white text-sm sm:text-base fixed top-0 left-0 w-full z-50 p-2 sm:px-4 md:px-6 shadow-md">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          {/* Sidebar Toggle Button for small screens */}
+          <div className="md:hidden flex items-center">
+            <button onClick={toggleSidebar} className="text-white">
+              {sidebarOpen ? <FaTimes size={25} /> : <FaBars size={25} />}
+            </button>
+          </div>
+
+          {/* Sidebar Menu for small screens */}
+          <div
+            ref={sidebarRef}
+            className={`fixed left-0 top-0 w-64 h-full bg-red-600 text-white z-40 transition-transform duration-300 ease-in-out ${
+              sidebarOpen ? "transform translate-x-0" : "transform -translate-x-full"
+            }`}
+          >
+            <div className="flex justify-between items-center p-4 bg-red-700">
+              <h2 className="text-2xl font-extrabold">upDate</h2>
+              <button onClick={toggleSidebar}>
+                <FaTimes size={24} />
+              </button>
+            </div>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <button
+                  onClick={() => setShowRecruiterForm(true)}
+                  className="flex items-center justify-center gap-2 w-[90%] mx-auto py-3 px-4 bg-red-500 text-white rounded-md shadow-lg hover:bg-red-400"
+                >
+                  <img src={img} alt="Jobs Icon" className="w-5" />
+                  Jobs
+                </button>
+              </li>
+              <li className="border-t border-white">
+                <a
+                  href="/Landing"
+                  className="block py-3 px-4 text-white hover:bg-red-500"
+                >
+                  Home
+                </a>
+              </li>
+              <li className="border-t border-white">
+                <a href="#" className="block py-3 px-4 text-white hover:bg-red-500">
+                  All Jobs
+                </a>
+              </li>
+              <li className="border-t border-white">
+                <a
+                  href="/courses"
+                  className="block py-3 px-4 text-white hover:bg-red-500"
+                >
+                  Courses
+                </a>
+              </li>
+            </ul>
+            <div className="absolute bottom-4 left-0 w-full">
+              <button
+                onClick={handleLogout}
+                className="bg-white text-red-700 mx-4 w-[calc(100%-2rem)] py-2 rounded-md text-center font-bold hover:bg-gray-200"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+
+          {/* Logo Section */}
+          <div className="flex items-center gap-4 sm:gap-6">
+            <a href="/" className="text-xl sm:text-2xl font-extrabold text-white">
               upDate
             </a>
           </div>
 
-          {/* Desktop Menu Links */}
-          <div className="hidden md:flex space-x-8  ">
-            <a
-              href="/Landing"
-              className="text-white hover:scale-105 hover:underline transition-all shadow-lg hover:text-primary"
-            >
+          {/* Desktop Menu Section */}
+          <div className="hidden md:flex items-center gap-8">
+            <a href="/Landing" className="menu-link text-lg">
               Home
             </a>
-
-            <a
-              href={isUserAuthenticated ? "/MarketPlace" : "/login"}
-              className="text-white hover:scale-105 hover:underline  transition-all shadow-lg hover:text-primary"
-            >
+            <a href="#" className="menu-link text-lg">
               All Jobs
             </a>
-            <a
-              href="/courses"
-              className="text-white hover:underline hover:scale-105 transition-all shadow-lg hover:text-primary"
-            >
+            <a href="/courses" className="menu-link text-lg">
               Courses
             </a>
           </div>
 
-          {/* Authentication Buttons */}
-          <div className="flex items-center justify-center">
-            {isUserAuthenticated ? (
-              <div className="hidden md:flex justify-end space-x-4 p-2">
-                <a href="/Profile">
-                  <img
-                    src={profile}
-                    className="w-10 cursor-pointer hover:scale-105 transition-transform shadow-md"
-                    alt="Profile"
-                  />
-                </a>
-                {Logout && (
-                  <button
-                    onClick={handleLogout}
-                    className=" text-black bg-white shadow-inner-custom bg-primary rounded-full px-3 py-1 hover:scale-105 transition-all"
-                  >
-                    Logout
-                  </button>
-                )}
-              </div>
-            ) : (
-              <>
+          {/* Authentication and Dropdown Menu */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            {/* New Job Button (Hidden on Mobile) */}
+            {!isMobileView && (
+              <div className="relative">
                 <button
-                  onClick={() => (window.location.href = "/login")}
-                  className="text-black bg-white shadow-inner-custom mx-5  hidden md:block  rounded-full px-3 py-1 hover:bg-opacity-90 transition-all"
+                  onClick={() => setShowRecruiterForm(true)}
+                  className="bg-white text-red-700 font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-pointer shadow-md text-xs sm:text-sm"
                 >
-                  Login
+                  Job
+                  <img src={img2} alt="Arrow Icon" className="w-4" />
                 </button>
-                <button
-                  onClick={() => (window.location.href = "/login")}
-                  className="text-black bg-white shadow-inner-custom  hidden md:block  rounded-full px-3 py-1 hover:bg-opacity-90 transition-all"
-                >
-                  SignUp
-                </button>
-              </>
-            )}
-            {!isUserAuthenticated && (
-              <div className="relative hidden md:block ml-2">
-                <button
-                  className=" underline text-white text-sm text-black px-1 py-2 rounded-full shadow-inner flex items-center gap-2"
-                  onClick={toggleDropdown}
-                >
-                  Job Seeker{" "}
-                  <img
-                    src={dropdown}
-                    alt="Dropdown Icon"
-                    className="    fill-white"
-                  />
-                </button>
-                {dropdownOpen && (
-                  <div className="absolute bg-white shadow-md rounded-lg mt-2 w-36">
-                    <a
-                      href="/login"
-                      className="block text-black px-4 py-2 hover:bg-red-700 hover:text-white"
-                    >
-                      Recruiter
-                    </a>
-                    <a
-                      href="/login"
-                      className="block text-black px-4 py-2 hover:bg-red-700 hover:text-white"
-                    >
-                      Job Seeker
-                    </a>
-                  </div>
-                )}
               </div>
             )}
-            {isUserAuthenticated && !isJobSeeker && (
-              <>
-                {" "}
-                <div
-                  onClick={() => (window.location.href = "/addjob")}
-                  id="addingjob"
-                  className="addingjob shadow-inner-custom  bg-white cursor-pointer hover:scale-105 hidden md:block md:flex p-2 text-black rounded-full   "
-                >
-                  <img
-                    src="/plus.svg"
-                    height={30}
-                    width={30}
-                    alt=""
-                    srcset=""
-                    className="addingjob "
-                  />
-                  add job
-                </div>
-              </>
-            )}
-          </div>
 
-          {/* Mobile View */}
-          <div className="md:hidden flex items-center justify-between w-full">
-            {/* Menu Button on the Left */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="text-white transition-transform transform hover:scale-105 shadow-lg focus:outline-none"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d={
-                    isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"
-                  }
-                />
-              </svg>
-            </button>
-
-            {/* Logo in the Center */}
-            <div className="flex-grow text-center">
-              <a href="/" className="text-xl font-bold text-primary">
-                upDate
-              </a>
-            </div>
-            {isUserAuthenticated && !isJobSeeker && (
-              <>
-                {" "}
-                <button className="bg-white m-1 shadow-inner-custom flex items-center justify-center text-black rounded-full p-1 ">
-                  <img src="/plus.svg" alt="" className="w-10" />
-                  add job
-                </button>
-              </>
-            )}
-            {!isUserAuthenticated && (
+            {/* Role Dropdown */}
+            <div className="relative">
               <button
-                onClick={() => (window.location.href = "login")}
-                className="text-black bg-white  rounded-full px-3 py-1 hover:bg-opacity-90 transition-all"
+                id="roleDropdown"
+                className="bg-white text-[rgb(197,6,6)] font-bold min-w-[120px] px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-pointer shadow-md text-xs sm:text-sm"
+                onClick={toggleDropdown}
               >
-                signIN
+                {role}
+                <img src={img} alt="Arrow Icon" className="w-4" />
               </button>
-            )}
-            {/* Profile Icon on the Right */}
-            {isUserAuthenticated && (
-              <a href="/Profile">
-                <img
-                  src={profile}
-                  className="w-10 cursor-pointer hover:scale-105 transition-transform shadow-md"
-                  alt="Profile"
-                />
-              </a>
-            )}
+              {dropdownOpen && (
+                <div
+                  className="absolute bg-white shadow-md rounded-b-lg top-full left-0 w-[145px] transition-transform duration-300 ease-in-out origin-top"
+                  id="dropdownMenu"
+                >
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-red-600 text-center font-bold text-black"
+                    onClick={() => changeRole("Recruiter")}
+                  >
+                    Recruiter
+                  </a>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 hover:bg-red-600 text-center font-bold text-black"
+                    onClick={() => changeRole("Job Seeker")}
+                  >
+                    Job Seeker
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* Profile Section */}
+         {/* <img src={profile} alt="" /> */}
+            
+           {/* Profile Icon */}
+  <a href="/Profile" id="profileSection">
+    <img
+      src={profile}
+      alt="Profile"
+      className="w-8 h-8 rounded-full cursor-pointer border border-white shadow-md"
+    />
+  </a>
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-purple-600">
-          <ul className="space-y-4 p-4 text-center text-white">
-            <li>
-              <a
-                href="/Landing"
-                className="block text-lg hover:scale-105 transition-all shadow-md"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="/Aboutus"
-                className="block text-lg hover:scale-105 transition-all shadow-md"
-              >
-                About Us
-              </a>
-            </li>
-            <li>
-              <a
-                href={isUserAuthenticated ? "/MarketPlace" : "/login"}
-                className="block text-lg hover:scale-105 transition-all shadow-md"
-              >
-                All Jobs
-              </a>
-            </li>
-            <li>
-              <a
-                href="/courses"
-                className="block text-lg hover:scale-105 transition-all shadow-md"
-              >
-                Courses
-              </a>
-            </li>
-            <li>
-              <a
-                href="/contact"
-                className="block text-lg hover:scale-105 transition-all shadow-md"
-              >
-                Contact Us
-              </a>
-            </li>
-          </ul>
+       {/* Modal for Recruiter Form */}
+       {showRecruiterForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-80 max-w-md ">
+          <RecruiterForm />
+            
+             {/* Close functionality */}
+             <button
+              onClick={() => setShowRecruiterForm(false)}
+              className="mt-4 bg-red-500 text-white px-2 py-2 rounded-lg hover:bg-red-600 text-center"
+            >
+              Close Form
+            </button>
+          </div>
         </div>
       )}
-    </nav>
+    </>
   );
 };
 

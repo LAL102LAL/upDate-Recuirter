@@ -1,4 +1,5 @@
 const express = require("express");
+const mongoose= require("mongoose");
 const app = express();
 
 
@@ -43,7 +44,7 @@ app.use("/",payment)
 
 database
   .then(() => {
-    console.log("databse connecte....");
+    console.log("databse connected....");
     const Port = process.env.PORT||5000;
     app.listen(Port, () => {
       console.log("listenign.........."+Port);
