@@ -85,7 +85,6 @@ const NavBar = () => {
       window.removeEventListener("resize", updateViewMode);
     };
   }, [isUserAuthenticated, sidebarOpen]);
-  console.log(isUserAuthenticated);
 
   return (
     <>
@@ -195,25 +194,45 @@ const NavBar = () => {
           {/* Authentication and Dropdown Menu */}
           <div className="flex items-center gap-3 sm:gap-4">
             {!isMobileView && (
-              <div className="relative">
-                {isUserAuthenticated ? (
-                  <button
-                    onClick={() => setShowRecruiterForm(true)}
-                    className="bg-white text-red-700 font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-pointer shadow-md text-xs sm:text-sm"
-                  >
-                    Post Job
-                    <img src={img2} alt="Arrow Icon" className="w-4" />
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => alert("Please log in to post a job.")}
-                    className="bg-red-200 text-white font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-not-allowed shadow-md text-xs sm:text-sm"
-                  >
-                    Post Job
-                    <img src={img2} alt="Arrow Icon" className="w-4" />
-                  </button>
-                )}
-              </div>
+              <>
+                <div className="relative">
+                  {isUserAuthenticated ? (
+                    <button
+                      onClick={() => setShowRecruiterForm(true)}
+                      className="bg-white text-red-700 font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-pointer shadow-md text-xs sm:text-sm"
+                    >
+                      Post Job
+                      <img src={img2} alt="Arrow Icon" className="w-4" />
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => alert("Please log in to post a job.")}
+                      className="bg-red-200 text-white font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-not-allowed shadow-md text-xs sm:text-sm"
+                    >
+                      Post Job
+                      <img src={img2} alt="Arrow Icon" className="w-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* <div className="relative hidden lg:block">
+                  {isUserAuthenticated ? (
+                    <button
+                      onClick={handleLogout}
+                      className="bg-white text-red-700 font-bold px-3 py-2 rounded-md shadow-md hover:bg-gray-200"
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <a
+                      href="/login"
+                      className="bg-white text-red-700 font-bold px-3 py-2 rounded-md shadow-md hover:bg-gray-200"
+                    >
+                      Login
+                    </a>
+                  )}
+                </div> */}
+              </>
             )}
             <div className="relative">
               <button
@@ -243,9 +262,30 @@ const NavBar = () => {
                   >
                     Job Seeker
                   </a>
+
+                  
                 </div>
               )}
             </div>
+
+            <div className="relative hidden md:block lg:block">
+                  {isUserAuthenticated ? (
+                    <button
+                      onClick={handleLogout}
+                      className="bg-white text-red-700 font-bold px-3 py-2 rounded-md shadow-md hover:bg-gray-200"
+                    >
+                      Logout
+                    </button>
+                  ) : (
+                    <a
+                      href="/login"
+                      className="bg-white text-red-700 font-bold px-3 py-2 rounded-md shadow-md hover:bg-gray-200"
+                    >
+                      Login
+                    </a>
+                  )}
+                </div>
+
             <a href="/Profile" id="profileSection">
               <img
                 src={profile}
@@ -276,3 +316,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+
