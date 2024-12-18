@@ -14,15 +14,30 @@ const Footersection = () => {
           <div className="footer-links">
             <a
               href="/Aboutus"
-              className="text-white hover:scale-105 transition-all shadow-lg hover:text-primary"
+              className="text-white hover:scale-105 transition-all shadow-lg hover:text-primary duration-150"
             >
               About Us
             </a>
-            <a href="#contact">Contact</a>
-            <a href="#careers">Careers</a>
-            <a href="#privacy">Privacy Policy</a>
+            <a
+              href="/Contactus"
+              className="text-white hover:scale-105 transition-all shadow-lg hover:text-primary duration-150"
+            >
+              Contact Us
+            </a>
+            <a
+              href="/carrer"
+              className="text-white hover:scale-105 transition-all shadow-lg hover:text-primary  duration-150"
+            >
+              Carrer
+            </a>
+            <a
+              href="/privacy"
+              className="text-white hover:scale-105 transition-all shadow-lg hover:text-primary duration-150 "
+            >
+              Privacy policy
+            </a>
           </div>
-          <div className="footer-socials">
+          <div className="footer-socials my-5">
             <a href="#">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png"
@@ -44,7 +59,7 @@ const Footersection = () => {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2024 HirePath. All rights reserved.</p>
+          <p>&copy; 2024 upDate. All rights reserved.</p>
         </div>
       </footer>
     </>

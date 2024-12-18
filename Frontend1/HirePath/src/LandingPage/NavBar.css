@@ -297,7 +297,8 @@ body {
   display: flex;
   align-items: center;
   justify-items: center;
-  gap: 2rem;
+  /* gap: 2rem; */
+  justify-content:space-around;
   white-space: nowrap;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -319,23 +320,32 @@ body {
   font-family: monument;
   margin-right: 1vh;
   /* background-color: teal; */
-  /* width: fit-content; */
+  width: fit-content;
 }
 
 /* Adjust font size and animation duration for responsiveness */
-@media (max-width: 768px) {
+@media (max-width: 773px) {
   .marque h1 {
     font-size: 50px; /* Decrease font size for smaller screens */
     animation-duration: 10s; /* Slower animation for readability */
   }
 }
 
+
+@media (max-width: 768px) {
+  .marque h1 {
+    font-size: 90px; /* Decrease font size for smaller screens */
+    animation-duration: 10s; /* Slower animation for readability */
+  }
+}
+
 @media (max-width: 480px) {
   .marque h1 {
-    font-size: 180px; /* Further decrease font size */
+    font-size: 900px; /* Further decrease font size */
     animation-duration: 12s; /* Slower animation */
   }
 }
+
 
 .marque h1:hover {
   color: #b7f1b9;

@@ -1,20 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { FaBuilding, FaUserTie, FaCalendarAlt, FaMapMarkerAlt } from "react-icons/fa";
+import { FaBuilding, FaUserTie, FaCalendarAlt, FaMapMarkerAlt, FaUsers, FaWrench } from "react-icons/fa";
 
 const RecruiterForm = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     companyName: "",
     vacancyTitle: "",
-    skillRequired: "",
-    vacancyNumber: "",
-    experienceLevel: "fresher",
-    ctcPackage: "",
     location: "",
-    mode: "",
-    perks: "",
     lastDate: "",
-    description: "",
+    totalCandidates: "",
+    skillRequired: "",
   });
   const [isFormOpen, setIsFormOpen] = useState(true); // State to control form visibility
 
@@ -49,15 +44,10 @@ const RecruiterForm = () => {
     setFormData({
       companyName: "",
       vacancyTitle: "",
-      skillRequired: "",
-      vacancyNumber: "",
-      experienceLevel: "fresher",
-      ctcPackage: "",
       location: "",
-      mode: "",
-      perks: "",
       lastDate: "",
-      description: "",
+      totalCandidates: "",
+      skillRequired: "",
     });
   };
 
@@ -117,7 +107,7 @@ const RecruiterForm = () => {
                     onSubmit={handleSubmit}
                     className="grid grid-cols-1 gap-6 max-h-[65vh] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-200 px-4"
                   >
-                    {[ 
+                    {[
                       {
                         id: "companyName",
                         label: "Company Name",
@@ -127,6 +117,16 @@ const RecruiterForm = () => {
                         id: "vacancyTitle",
                         label: "Job Title",
                         icon: <FaUserTie />,
+                      },
+                      {
+                        id: "totalCandidates",
+                        label: "Total No. of Candidates",
+                        icon: <FaUsers />,
+                      },
+                      {
+                        id: "skillRequired",
+                        label: "Required Skills",
+                        icon: <FaWrench />,
                       },
                       {
                         id: "location",
@@ -174,13 +174,6 @@ const RecruiterForm = () => {
           </div>
         </div>
       )}
-      
-      {/* Main page shown when the form is closed */}
-      {/* {!isFormOpen && (
-        <div className="bg-gray-200 flex justify-center items-center h-screen">
-          <h1 className="text-4xl font-bold text-blue-500">Welcome to the Landing Page</h1>
-        </div>
-      )} */}
     </>
   );
 };

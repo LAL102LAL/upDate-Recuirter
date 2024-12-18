@@ -21,6 +21,7 @@ import RT from "./Pages/RT";
 import NavBar from "./LandingPage/NavBar";
 import { ShimmerCategoryItems } from "shimmer-effects-react";
 import PaymentSuccess from "./Pages/PaymentSucess";
+//  import InterviewPrep from "./components/InterviewPrep";
 
 const App = () => {
   return (

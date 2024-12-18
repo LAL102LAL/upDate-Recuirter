@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import profile from "../assets/profile2.png";
-
 import img from "../assets/plus_icon.png";
 import img2 from "../assets/down-arrow.png";
 import RecruiterForm from "../components/RecruiterForm/RecruiterForm.jsx"; // Import the RecruiterForm
@@ -23,7 +22,6 @@ const NavBar = () => {
         `${import.meta.env.VITE_API_URL}/Profile`,
         { 
           withCredentials: true ,
-
         }
       );
       if (response.status === 200) {
@@ -35,7 +33,6 @@ const NavBar = () => {
     }
   };
  
-
   const handleLogout = async () => {
     try {
       const logout = await axios.post(
@@ -116,13 +113,23 @@ const NavBar = () => {
             </div>
             <ul className="mt-4 space-y-2">
               <li>
-                <button
-                  onClick={() => setShowRecruiterForm(true)}
-                  className="flex items-center justify-center gap-2 w-[90%] mx-auto py-3 px-4 bg-red-500 text-white rounded-md shadow-lg hover:bg-red-400"
-                >
-                  <img src={img} alt="Jobs Icon" className="w-5" />
-                  Jobs
-                </button>
+                {isUserAuthenticated ? (
+                  <button
+                    onClick={() => setShowRecruiterForm(true)}
+                    className="flex items-center justify-center gap-2 w-[90%] mx-auto py-3 px-4 bg-red-500 text-white rounded-md shadow-lg hover:bg-red-400"
+                  >
+                    <img src={img} alt="Jobs Icon" className="w-5" />
+                    Post Jobs
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => alert("Please log in to post a job.")}
+                    className="flex items-center justify-center gap-2 w-[90%] mx-auto py-3 px-4 bg-red-500 text-white rounded-md drop-shadow-lg cursor-not-allowed"
+                  >
+                    <img src={img} alt="Jobs Icon" className="w-5" />
+                    Post Jobs
+                  </button>
+                )}
               </li>
               <li className="border-t border-white">
                 <a
@@ -147,12 +154,21 @@ const NavBar = () => {
               </li>
             </ul>
             <div className="absolute bottom-4 left-0 w-full">
-              <button
-                onClick={handleLogout}
-                className="bg-white text-red-700 mx-4 w-[calc(100%-2rem)] py-2 rounded-md text-center font-bold hover:bg-gray-200"
-              >
-                Logout
-              </button>
+              {isUserAuthenticated ? (
+                <button 
+                  onClick={handleLogout}
+                  className="bg-white text-red-700 mx-4 w-[calc(100%-2rem)] py-2 rounded-md text-center font-bold hover:bg-gray-200"
+                >
+                  Logout
+                </button>
+              ) : (
+                <a
+                  href="/login"
+                  className="bg-white text-red-700 mx-4 w-[calc(100%-5rem)] py-2 rounded-md text-center font-bold hover:bg-gray-200 p-20"
+                >
+                  Login
+                </a>
+              )}
             </div>
           </div>
 
@@ -165,33 +181,40 @@ const NavBar = () => {
 
           {/* Desktop Menu Section */}
           <div className="hidden md:flex items-center gap-8">
-            <a href="/Landing" className="menu-link text-lg">
+            <a href="/Landing" className="menu-link text-[1rem] font-bold">
               Home
             </a>
-            <a href="#" className="menu-link text-lg">
+            <a href="#" className="menu-link  text-[1rem] font-bold">
               All Jobs
             </a>
-            <a href="/courses" className="menu-link text-lg">
+            <a href="/courses" className="menu-link  text-[1rem] font-bold">
               Courses
             </a>
           </div>
 
           {/* Authentication and Dropdown Menu */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* New Job Button (Hidden on Mobile) */}
             {!isMobileView && (
               <div className="relative">
-                <button
-                  onClick={() => setShowRecruiterForm(true)}
-                  className="bg-white text-red-700 font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-pointer shadow-md text-xs sm:text-sm"
-                >
-                  Job
-                  <img src={img2} alt="Arrow Icon" className="w-4" />
-                </button>
+                {isUserAuthenticated ? (
+                  <button
+                    onClick={() => setShowRecruiterForm(true)}
+                    className="bg-white text-red-700 font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-pointer shadow-md text-xs sm:text-sm"
+                  >
+                    Post Job
+                    <img src={img2} alt="Arrow Icon" className="w-4" />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => alert("Please log in to post a job.")}
+                    className="bg-red-200 text-white font-bold px-3 py-2 rounded-full flex items-center justify-between gap-2 cursor-not-allowed shadow-md text-xs sm:text-sm"
+                  >
+                    Post Job
+                    <img src={img2} alt="Arrow Icon" className="w-4" />
+                  </button>
+                )}
               </div>
             )}
-
-            {/* Role Dropdown */}
             <div className="relative">
               <button
                 id="roleDropdown"
@@ -223,30 +246,23 @@ const NavBar = () => {
                 </div>
               )}
             </div>
-
-            {/* Profile Section */}
-         {/* <img src={profile} alt="" /> */}
-            
-           {/* Profile Icon */}
-  <a href="/Profile" id="profileSection">
-    <img
-      src={profile}
-      alt="Profile"
-      className="w-8 h-8 rounded-full cursor-pointer border border-white shadow-md"
-    />
-  </a>
+            <a href="/Profile" id="profileSection">
+              <img
+                src={profile}
+                alt="Profile"
+                className="w-8 h-8 rounded-full cursor-pointer border border-white shadow-md"
+              />
+            </a>
           </div>
         </div>
       </nav>
 
-       {/* Modal for Recruiter Form */}
-       {showRecruiterForm && (
+      {showRecruiterForm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-4 rounded-lg shadow-lg w-80 max-w-md ">
-          <RecruiterForm />
-            
-             {/* Close functionality */}
-             <button
+            <RecruiterForm />
+
+            <button
               onClick={() => setShowRecruiterForm(false)}
               className="mt-4 bg-red-500 text-white px-2 py-2 rounded-lg hover:bg-red-600 text-center"
             >

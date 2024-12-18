@@ -140,6 +140,7 @@ const AuthPage = () => {
                   <option value="">Select one</option>
                   <option value="jobseeker">jobSeeker</option>
                   <option value="recruiter">recruiter</option>
+                  {/* <option value="recruiter">Both</option> */}
                 </select>
                 {errors.whoIAm && (
                   <span className="text-pink-500 text-xs">
@@ -242,6 +243,10 @@ const AuthPage = () => {
           <UserButton />
         </SignedIn>
       </header> */}
+
+
+
+      
     </>
   );
 };

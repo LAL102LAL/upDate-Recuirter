@@ -132,7 +132,7 @@ const SectionService = () => {
               <h1>Resume Building</h1>
             </div>
           </Link>
-
+          {/* <Link to={"Intrerviewque"}> */}
           <div
             ref={(el) => (serviceCardsRef.current[3] = el)}
             className="service-card hover:scale-105"
@@ -140,6 +140,7 @@ const SectionService = () => {
           >
             <h1>Interview Prep</h1>
           </div>
+          {/* </Link>  */}
         </div>
       </section>
     </>
@@ -147,3 +148,6 @@ const SectionService = () => {
 };
 
 export default SectionService;
+
+
+
