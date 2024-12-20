@@ -21,6 +21,7 @@ body {
 .course-card {
   background: #f0f4f8;
   padding: 1.5em;
+  
   border-radius: 8px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

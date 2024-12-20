@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
-
+import ITCOURSE from "./itcourse";
+import MBACourse from "./mbacourse";
+import CourseForm from "./courseform";
 const ApplyCourse = () => {
   const submitApplication = (event) => {
     event.preventDefault();
@@ -20,9 +22,18 @@ const ApplyCourse = () => {
     window.addEventListener("scroll", checkVisibility);
     return () => window.removeEventListener("scroll", checkVisibility);
   }, []);
-
+  
   return (
-    <section
+<>
+<>
+<>
+
+<ITCOURSE/>
+<MBACourse/>
+<CourseForm/>
+
+
+ <section
       id="apply-course"
       className="opacity-0 transform translate-y-12 transition-all duration-500 ease-in-out bg-gray-100 py-8 border-t border-b border-gray-300 text-center"
     >
@@ -73,8 +84,9 @@ const ApplyCourse = () => {
           id="email"
           name="email"
           required
-          className="w-full p-3 mt-2 border border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none"
+          className="w-full p-3 mt-2 border-gray-300 rounded focus:border-blue-500 focus:ring focus:ring-blue-200 focus:outline-none"
         />
+        
 
         <button
           type="submit"
@@ -82,9 +94,15 @@ const ApplyCourse = () => {
         >
           Submit Application
         </button>
-      </form>
+        </form>
     </section>
+    
+  
+    </>
+    </>
+    </>
   );
 };
+
 
 export default ApplyCourse;

@@ -1,5 +1,5 @@
 import React from "react";
-import PaymentForm from "../paymentform/Payment";
+
 
 const TrendingCourse = () => {
   const courses = [
@@ -63,6 +63,9 @@ const TrendingCourse = () => {
       name: "UI/UX Designer",
       description: "Designing enhances skills and shows creativity.",
     },
+     
+    
+    
   ];
 
   const applyCourse = (courseName) => {
@@ -72,7 +75,7 @@ const TrendingCourse = () => {
   return (
 
     <>
-    <PaymentForm/>
+    
     <section id="trending-courses" className="py-10 bg-gray-100 text-center">
       <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center mx-auto px-4">
         {courses.map((course, index) => (
@@ -84,12 +87,14 @@ const TrendingCourse = () => {
               {course.name}
             </h3>
             <p className="text-gray-600 mb-4">{course.description}</p>
+            
             <button
               onClick={() => applyCourse(course.name)}
               className="bg-blue-600 text-white py-2 px-4 rounded-full hover:bg-blue-700 transition-colors duration-300"
             >
               Apply Now
             </button>
+            
           </div>
         ))}
       </div>
