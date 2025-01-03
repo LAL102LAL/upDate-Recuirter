@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import PersonalDetails from "./applyPage/PersonalDetails";
+import PersonalDetails from "applyPage/PersonalDetails";
 import QualificationDetails from "./applyPage/QualificationDetails";
 import Skills from "./applyPage/Skills";
 
-import DocumentsUpload from "./applyPage/DocumentsUpload";
-import ResidencyDetails from "./applyPage/ResidencyDetails";
+import DocumentsUpload from "applyPage/DocumentsUpload";
+import ResidencyDetails from "applyPage/ResidencyDetails";
 
 const ApplyPage = () => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
